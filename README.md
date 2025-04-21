@@ -1,4 +1,4 @@
-# TextSavvy
+# ReadFast
 
 A chrome extension to help make web browsing accessible for everyone :)
 

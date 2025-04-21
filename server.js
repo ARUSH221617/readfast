@@ -1,20 +1,22 @@
-const express = require('express');
-const cors = require('cors');
-const fetch = require('node-fetch');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const fetch = require("node-fetch");
+require("dotenv").config();
 
 const app = express();
 
 // Configure CORS with specific options
-app.use(cors({
-  origin: true, // Allow all origins
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: true, // Allow all origins
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    credentials: true,
+  }),
+);
 
 // Handle preflight requests
-app.options('*', cors());
+app.options("*", cors());
 
 // Parse JSON bodies
 app.use(express.json());
@@ -22,11 +24,11 @@ app.use(express.json());
 const COHERE_API_KEY = process.env.COHERE_API_KEY;
 
 // Health check endpoint for Render
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'TextSavy API is running' });
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "ReadFast API is running" });
 });
 
-app.post('/api/translate', async (req, res) => {
+app.post("/api/translate", async (req, res) => {
   try {
     const { text, language } = req.body;
     const response = await fetch("https://api.cohere.ai/v2/generate", {
@@ -44,12 +46,12 @@ app.post('/api/translate', async (req, res) => {
     const data = await response.json();
     res.json({ text: data.generations[0].text.trim() });
   } catch (error) {
-    console.error('Translation error:', error);
+    console.error("Translation error:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.post('/api/modify', async (req, res) => {
+app.post("/api/modify", async (req, res) => {
   try {
     const { text, prompt } = req.body;
     const response = await fetch("https://api.cohere.ai/v2/generate", {
@@ -67,7 +69,7 @@ app.post('/api/modify', async (req, res) => {
     const data = await response.json();
     res.json({ text: data.generations[0].text.trim() });
   } catch (error) {
-    console.error('Modification error:', error);
+    console.error("Modification error:", error);
     res.status(500).json({ error: error.message });
   }
 });

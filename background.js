@@ -17,6 +17,7 @@ chrome.runtime.onInstalled.addListener(() => {
   // Create language submenu items
   const languages = [
     { id: "translateEnglish", title: "English", lang: "English" },
+    { id: "translatePersian", title: "Persian", lang: "Persian" },
     { id: "translateSpanish", title: "Spanish", lang: "Spanish" },
     { id: "translateFrench", title: "French", lang: "French" },
     { id: "translateGerman", title: "German", lang: "German" },
@@ -59,6 +60,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   else if (info.menuItemId.startsWith("translate")) {
     const languageMap = {
       translateEnglish: "English",
+      translatePersian: "Persian",
       translateSpanish: "Spanish",
       translateFrench: "French",
       translateGerman: "German",

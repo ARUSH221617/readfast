@@ -16,7 +16,7 @@ style.textContent = `
   @font-face {
     font-family: 'Nunito';
     src: url('${chrome.runtime.getURL(
-      "fonts/Nunito-Medium.ttf"
+      "fonts/Nunito-Medium.ttf",
     )}') format('truetype');
     font-weight: normal;
     font-style: normal;
@@ -24,7 +24,7 @@ style.textContent = `
   @font-face {
     font-family: 'OpenDyslexic';
     src: url('${chrome.runtime.getURL(
-      "fonts/OpenDyslexic-Regular.otf"
+      "fonts/OpenDyslexic-Regular.otf",
     )}') format('opentype');
     font-weight: normal;
     font-style: normal;
@@ -32,7 +32,7 @@ style.textContent = `
   @font-face {
     font-family: 'Roboto';
     src: url('${chrome.runtime.getURL(
-      "fonts/Roboto-Regular.ttf"
+      "fonts/Roboto-Regular.ttf",
     )}') format('truetype');
     font-weight: normal;
     font-style: normal;
@@ -43,16 +43,20 @@ style.textContent = `
     font-weight: normal;
     font-style: normal;
   }
+  @font-face {
+    font-family: 'IRANSansWeb_FaNum';
+    src: url('${chrome.runtime.getURL("fonts/IRANSansWeb_FaNum.ttf")}') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
 `;
 document.head.appendChild(style);
-
 
 let speechSynthesisActive = false;
 
 let originalStyles = {};
 run_once = false;
 let colorblindModeEnabled = false;
-
 
 function saveSelection() {
   if (window.getSelection) {
@@ -64,7 +68,6 @@ function saveSelection() {
   return null;
 }
 
-
 function restoreSelection(range) {
   if (range) {
     if (window.getSelection) {
@@ -75,14 +78,10 @@ function restoreSelection(range) {
   }
 }
 
-
 function speakText(text) {
-
   stopSpeech();
 
-
   const utterance = new SpeechSynthesisUtterance(text);
-
 
   chrome.storage.sync.get(
     ["speechVoice", "speechRate", "speechPitch"],
@@ -92,7 +91,6 @@ function speakText(text) {
       let rate = data.speechRate || 1;
       let pitch = data.speechPitch || 1;
 
-
       if (voiceName) {
         const voices = window.speechSynthesis.getVoices();
         const voice = voices.find((v) => v.name === voiceName);
@@ -101,10 +99,8 @@ function speakText(text) {
         }
       }
 
-
       utterance.rate = rate;
       utterance.pitch = pitch;
-
 
       utterance.onstart = () => {
         speechSynthesisActive = true;
@@ -123,7 +119,7 @@ function speakText(text) {
 
       // Speak the text
       window.speechSynthesis.speak(utterance);
-    }
+    },
   );
 }
 
@@ -161,7 +157,6 @@ function captureOriginalStyles() {
     }
   });
 
-
   originalStyles.html = document.documentElement.innerHTML;
 }
 
@@ -170,45 +165,44 @@ if (run_once == false) {
   run_once = true;
 }
 
-
 function applyColorblindMode(enabled) {
   colorblindModeEnabled = enabled;
   console.log("Colorblind mode:", enabled ? "enabled" : "disabled");
 
   if (enabled) {
-
     document.body.style.filter = "contrast(105%) saturate(200%)";
   } else {
-
     document.body.style.filter = "none";
   }
 }
 
-
 async function callCohere(prompt) {
   try {
     // Show loading indicator
-    const loadingSpan = document.createElement('span');
-    loadingSpan.textContent = '⌛ Processing...';
-    loadingSpan.style.backgroundColor = '#fff3cd';
-    loadingSpan.style.padding = '2px 5px';
-    loadingSpan.style.borderRadius = '3px';
+    const loadingSpan = document.createElement("span");
+    loadingSpan.textContent = "⌛ Processing...";
+    loadingSpan.style.backgroundColor = "#fff3cd";
+    loadingSpan.style.padding = "2px 5px";
+    loadingSpan.style.borderRadius = "3px";
     document.body.appendChild(loadingSpan);
 
-    const res = await fetch("https://textsavvy-backend.onrender.com/api/modify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
+    const res = await fetch(
+      "https://textsavvy-backend.onrender.com/api/modify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        mode: "cors",
+        credentials: "omit",
+        body: JSON.stringify({
+          text: prompt,
+          prompt: prompt,
+        }),
       },
-      mode: "cors",
-      credentials: "omit",
-      body: JSON.stringify({
-        text: prompt,
-        prompt: prompt
-      }),
-    });
-    
+    );
+
     // Remove loading indicator
     loadingSpan.remove();
 
@@ -220,17 +214,17 @@ async function callCohere(prompt) {
   } catch (error) {
     console.error("API error:", error);
     // Show error message to user
-    const errorSpan = document.createElement('span');
-    errorSpan.textContent = '❌ Error: Could not process text. Please try again.';
-    errorSpan.style.backgroundColor = '#f8d7da';
-    errorSpan.style.padding = '2px 5px';
-    errorSpan.style.borderRadius = '3px';
+    const errorSpan = document.createElement("span");
+    errorSpan.textContent =
+      "❌ Error: Could not process text. Please try again.";
+    errorSpan.style.backgroundColor = "#f8d7da";
+    errorSpan.style.padding = "2px 5px";
+    errorSpan.style.borderRadius = "3px";
     document.body.appendChild(errorSpan);
     setTimeout(() => errorSpan.remove(), 3000);
     return { error: error.message };
   }
 }
-
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.table(request);
@@ -290,7 +284,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === "resetToDefault") {
-
     stopSpeech();
 
     resetToOriginalStyles();
@@ -318,12 +311,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     });
 
-
     const allSpans = document.querySelectorAll("span[style*='background']");
     allSpans.forEach((span) => {
       span.outerHTML = span.innerHTML;
     });
-
 
     colorblindModeEnabled = false;
     document.body.style.filter = "none";
@@ -367,26 +358,29 @@ async function handleTranslatePage(language) {
 
   try {
     // Show loading indicator
-    const loadingSpan = document.createElement('span');
+    const loadingSpan = document.createElement("span");
     loadingSpan.textContent = `⌛ loading ...`;
-    loadingSpan.style.backgroundColor = '#fff3cd';
-    loadingSpan.style.padding = '2px 5px';
-    loadingSpan.style.borderRadius = '3px';
+    loadingSpan.style.backgroundColor = "#fff3cd";
+    loadingSpan.style.padding = "2px 5px";
+    loadingSpan.style.borderRadius = "3px";
     document.body.appendChild(loadingSpan);
 
-    const res = await fetch("https://textsavvy-backend.onrender.com/api/translate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
+    const res = await fetch(
+      "https://textsavvy-backend.onrender.com/api/translate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        mode: "cors",
+        credentials: "omit",
+        body: JSON.stringify({
+          text: selectedText,
+          language: language,
+        }),
       },
-      mode: "cors",
-      credentials: "omit",
-      body: JSON.stringify({
-        text: selectedText,
-        language: language
-      }),
-    });
+    );
 
     // Remove loading indicator
     loadingSpan.remove();
@@ -395,9 +389,9 @@ async function handleTranslatePage(language) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     const data = await res.json();
-    
+
     if (!data || !data.text) {
-      throw new Error('No translation received');
+      throw new Error("No translation received");
     }
 
     restoreSelection(savedRange);
@@ -410,11 +404,11 @@ async function handleTranslatePage(language) {
   } catch (error) {
     console.error("Translation error:", error);
     // Show error message to user
-    const errorSpan = document.createElement('span');
-    errorSpan.textContent = '❌ Translation failed. Please try again.';
-    errorSpan.style.backgroundColor = '#f8d7da';
-    errorSpan.style.padding = '2px 5px';
-    errorSpan.style.borderRadius = '3px';
+    const errorSpan = document.createElement("span");
+    errorSpan.textContent = "❌ Translation failed. Please try again.";
+    errorSpan.style.backgroundColor = "#f8d7da";
+    errorSpan.style.padding = "2px 5px";
+    errorSpan.style.borderRadius = "3px";
     document.body.appendChild(errorSpan);
     setTimeout(() => errorSpan.remove(), 3000);
   }

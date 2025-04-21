@@ -16,7 +16,6 @@ const fontSpacingValue = document.getElementById("fontSpacingValue");
 const languageSelect = document.getElementById("languageSelect");
 const toggleBoldBtn = document.getElementById("toggleBold");
 
-
 const voiceSelect = document.getElementById("voiceSelect");
 const speechRateSlider = document.getElementById("speechRateSlider");
 const speechRateValue = document.getElementById("speechRateValue");
@@ -26,7 +25,6 @@ const speechPitchValue = document.getElementById("speechPitchValue");
 // --- Restore Stored Values on Load ---
 
 window.onload = () => {
-
   populateVoiceOptions();
 
   chrome.storage.sync.get(
@@ -68,28 +66,25 @@ window.onload = () => {
       }
 
       if (speechVoice && voiceSelect) {
-
         setTimeout(() => {
           if (voiceSelect.querySelector(`option[value="${speechVoice}"]`)) {
             voiceSelect.value = speechVoice;
           }
         }, 100);
       }
-    }
+    },
   );
-
 
   fontSizeValue.textContent = fontSizeSlider.value + "px";
   fontSpacingValue.textContent = fontSpacingSlider.value + "px";
-
 
   chrome.storage.sync.get(["font", "size", "spacing", "isBold"], (data) => {
     if (data.font) {
       fontSelect.value = data.font;
     }
     if (data.size) {
-      fontSizeSlider.value = data.size; 
-      fontSizeValue.textContent = data.size + "px"; 
+      fontSizeSlider.value = data.size;
+      fontSizeValue.textContent = data.size + "px";
     }
     if (data.spacing) {
       fontSpacingSlider.value = data.spacing;
@@ -106,18 +101,14 @@ window.onload = () => {
   });
 };
 
-
 function populateVoiceOptions() {
   if (!voiceSelect) return;
-
 
   while (voiceSelect.options.length > 1) {
     voiceSelect.remove(1);
   }
 
-
   let voices = speechSynthesis.getVoices();
-
 
   if (voices.length === 0) {
     speechSynthesis.onvoiceschanged = () => {
@@ -130,15 +121,12 @@ function populateVoiceOptions() {
 }
 
 function populateVoiceList(voices) {
-
   chrome.storage.sync.get(["speechVoice"], ({ speechVoice }) => {
-
     voices.forEach((voice) => {
       const option = document.createElement("option");
       option.textContent = `${voice.name} (${voice.lang})`;
       option.value = voice.name;
       voiceSelect.appendChild(option);
-
 
       if (speechVoice && voice.name === speechVoice) {
         option.selected = true;
@@ -149,11 +137,9 @@ function populateVoiceList(voices) {
 
 // --- Button Actions ---
 
-
 colorBlindBtn.addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.storage.sync.get(["colorblindModeEnabled"], (result) => {
-
       const currentState = result.colorblindModeEnabled || false;
 
       const newState = !currentState;
@@ -173,7 +159,7 @@ colorBlindBtn.addEventListener("click", () => {
                 ? "disable colorblind mode"
                 : "enable colorblind mode";
             }
-          }
+          },
         );
       });
     });
@@ -195,7 +181,7 @@ if (speakBtn) {
 if (simplifyBtn) {
   simplifyBtn.addEventListener("click", () => {
     sendPrompt(
-      "IMPORTANT FORMATTING INSTRUCTIONS: You must ONLY output the simplified version of the text, with NO additional text, NO explanations, NO introductions like 'Here is the simplified text', and NO comments of any kind. Your entire response must contain ONLY the simplified text.\n\nSimplify this text making it easier to read and understand while preserving all meaning:\n\n{{text}}"
+      "IMPORTANT FORMATTING INSTRUCTIONS: You must ONLY output the simplified version of the text, with NO additional text, NO explanations, NO introductions like 'Here is the simplified text', and NO comments of any kind. Your entire response must contain ONLY the simplified text.\n\nSimplify this text making it easier to read and understand while preserving all meaning:\n\n{{text}}",
     );
   });
 }
@@ -211,7 +197,6 @@ if (translateBtn && languageSelect) {
       });
     });
   });
-
 
   languageSelect.addEventListener("change", () => {
     chrome.storage.sync.set({ language: languageSelect.value });
@@ -336,15 +321,12 @@ function sendPrompt(promptText) {
 // --- Restore Stored Values on Load ---
 
 window.onload = () => {
-
   languageSelect.addEventListener("change", () => {
     chrome.storage.sync.set({ language: languageSelect.value });
   });
 
-
   fontSizeValue.textContent = fontSizeSlider.value + "px";
   fontSpacingValue.textContent = fontSpacingSlider.value + "px";
-
 
   chrome.storage.sync.get(["font", "size", "spacing"], (data) => {
     if (data.font) {

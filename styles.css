@@ -1,207 +1,252 @@
 body {
-  font-family: "Segoe UI", sans-serif;
-  margin: 0;
-  padding: 10px;
-  background-color: #f4f1f0;
-  width: 260px;
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 12px;
+    background-color: #f4f1f0;
+    width: 280px;
+    color: #2c3e50;
 }
 
 .container {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 16px 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 h1.title {
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
-  margin: 0 0 12px 0;
-  color: #333;
-}
-
-.close-btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0 8px;
-  color: #666;
-}
-
-.close-btn:hover {
-  color: #333;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 16px 0;
+    color: #1a237e;
+    letter-spacing: -0.5px;
 }
 
 h2 {
-  font-size: 18px;
-  font-weight: 400;
-  text-transform: lowercase;
-  margin: 12px 0 6px;
-  text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: lowercase;
+    margin: 12px 0 12px;
+    color: #455a64;
+    letter-spacing: 0.3px;
 }
 
 label {
-  font-size: 15px;
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 4px;
+    font-size: 14px;
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    color: #546e7a;
+    font-weight: 500;
 }
 
 select {
-  width: 100%;
-  padding: 8px 10px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  height: 38px;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1.5px solid #e0e0e0;
+    height: 40px;
+    background-color: #fff;
+    color: #2c3e50;
+    transition: all 0.2s ease;
+}
+
+select:hover {
+    border-color: #bdbdbd;
+}
+
+select:focus {
+    outline: none;
+    border-color: #90caf9;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
 }
 
 input[type="range"] {
-  width: 100%;
-  margin-top: 4px;
-  margin-bottom: 8px;
+    width: 100%;
+    margin: 8px 0;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #2196f3;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    background: #1976d2;
 }
 
 .btn {
-  width: 100%;
-  border: none;
-  padding: 8px;
-  margin-top: 6px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
+    width: 100%;
+    border: none;
+    padding: 10px 12px;
+    margin-top: 8px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: capitalize;
 }
 
 .btn.blue {
-  background-color: #b2dbff;
+    background-color: #90caf9;
+    color: #1a237e;
 }
 
 .btn.yellow {
-  background-color: #ffe1a1;
+    background-color: #ffe082;
+    color: #795548;
 }
 
 .btn.green {
-  background-color: #b0f9b0;
+    background-color: #a5d6a7;
+    color: #1b5e20;
 }
 
 .btn.pink {
-  background-color: #fdd8e5;
+    background-color: #f48fb1;
+    color: #880e4f;
 }
 
 .btn.purple {
-  background-color: #ddc7ff;
+    background-color: #b39ddb;
+    color: #4a148c;
 }
 
 .btn.grey {
-  background-color: #e3e0e0;
+    background-color: #e0e0e0;
+    color: #424242;
 }
 
 .btn:hover {
-  filter: brightness(95%);
-  transition: filter 0.2s ease;
+    transform: translateY(-1px);
+    filter: brightness(105%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn:active {
-  filter: brightness(85%);
+    transform: translateY(0);
+    filter: brightness(95%);
 }
 
 .small-btn {
-  height: 38px;
-  padding: 0 14px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #ddd;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    border: 1.5px solid #e0e0e0;
+    color: #455a64;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .small-btn:hover {
-  background-color: #ccc;
+    background-color: #eeeeee;
+    border-color: #bdbdbd;
 }
 
 .small-btn:active {
-  background-color: #bbb;
+    background-color: #e0e0e0;
+    transform: translateY(1px);
 }
 
 .row {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin-bottom: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
 }
 
 hr {
-  border: none;
-  border-top: 1px solid #ccc;
-  margin: 16px -12px;
-  width: calc(100% + 24px);
+    border: none;
+    border-top: 1.5px solid #f5f5f5;
+    margin: 20px -16px;
+    width: calc(100% + 32px);
 }
 
 section {
-  margin: 8px 0;
+    margin: 16px 0;
+    padding: 0 2px;
 }
 
 section > *:first-child {
-  margin-top: 0;
+    margin-top: 0;
 }
 
-  @font-face {
-    font-family: 'Boldonse';
-    src: url('fonts/Boldonse-Regular.ttf') format('truetype');
+/* Font faces */
+@font-face {
+    font-family: "Boldonse";
+    src: url("fonts/Boldonse-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'ComicSans';
-    src: url('fonts/ComicSansMS.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-label + input[type="range"] {
-  margin-top: 4px;
-  margin-bottom: 4px;
 }
-
-  @font-face {
-    font-family: 'Nunito';
-    src: url('fonts/Nunito-Medium.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'OpenDyslexic';
-    src: url('fonts/OpenDyslexic-Regular.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'Roboto';
-    src: url('fonts/Roboto-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'SourGummy';
-    src: url('fonts/SourGummy-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('fonts/Nunito-Medium.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: "ComicSans";
+    src: url("fonts/ComicSansMS.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url("fonts/Nunito-Medium.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    src: url("fonts/OpenDyslexic-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SourGummy";
+    src: url("fonts/SourGummy-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "IRANSansWeb_FaNum";
+    src: url("fonts/IRANSansWeb_FaNum.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Value indicators for sliders */
+#fontSizeValue,
+#fontSpacingValue,
+#speechRateValue,
+#speechPitchValue {
+    color: #2196f3;
+    font-weight: 600;
 }

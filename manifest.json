@@ -1,24 +1,24 @@
 {
-    "manifest_version": 3,
-    "name": "TextSavvy - Web browsing made easy for all",
-    "version": "1.0",
-    "permissions": ["contextMenus", "scripting", "activeTab", "storage"],
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ],
-    "web_accessible_resources": [
-      {
-        "resources": ["fonts/*.otf", "fonts/*.ttf"],
-        "matches": ["<all_urls>"]
-      }
-    ]
-  }
+  "manifest_version": 3,
+  "name": "ReadFast - Web browsing made easy for all",
+  "version": "1.0.1",
+  "permissions": ["contextMenus", "scripting", "activeTab", "storage"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/*.otf", "fonts/*.ttf"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
