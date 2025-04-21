@@ -178,13 +178,43 @@ function applyColorblindMode(enabled) {
 
 async function callCohere(prompt) {
   try {
-    // Show loading indicator
-    const loadingSpan = document.createElement("span");
-    loadingSpan.textContent = "⌛ Processing...";
-    loadingSpan.style.backgroundColor = "#fff3cd";
-    loadingSpan.style.padding = "2px 5px";
-    loadingSpan.style.borderRadius = "3px";
-    document.body.appendChild(loadingSpan);
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+    if (!selectedText) return { error: "No text selected" };
+    
+    const savedRange = saveSelection();
+    
+    // Create loading overlay for selected text
+    const loadingOverlay = document.createElement("span");
+    loadingOverlay.style.display = "inline";
+    loadingOverlay.style.position = "relative";
+    loadingOverlay.style.animation = "highlight-pulse 1.5s ease-in-out infinite";
+    loadingOverlay.innerHTML = selectedText;
+    
+    // Add loading animation styles if not already added
+    if (!document.getElementById('loading-animation-style')) {
+      const style = document.createElement("style");
+      style.id = 'loading-animation-style';
+      style.textContent = `
+        @keyframes highlight-pulse {
+          0% { background-color: rgba(200, 200, 200, 0.8); }
+          50% { background-color: rgba(180, 180, 180, 0.9); }
+          100% { background-color: rgba(200, 200, 200, 0.8); }
+        }
+        .processing-text {
+          background-color: rgba(200, 200, 200, 0.8);
+          border-radius: 2px;
+          padding: 0 1px;
+          margin: 0 -1px;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    loadingOverlay.className = 'processing-text';
+
+    // Replace selection with loading overlay
+    savedRange.deleteContents();
+    savedRange.insertNode(loadingOverlay);
 
     const res = await fetch(
       "https://textsavvy-backend.onrender.com/api/modify",
@@ -203,25 +233,39 @@ async function callCohere(prompt) {
       },
     );
 
-    // Remove loading indicator
-    loadingSpan.remove();
-
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     const data = await res.json();
+    
+    // Clean up loading animation
+    loadingOverlay.remove();
+    style.remove();
+    
     return { text: data.text };
   } catch (error) {
     console.error("API error:", error);
-    // Show error message to user
-    const errorSpan = document.createElement("span");
-    errorSpan.textContent =
-      "❌ Error: Could not process text. Please try again.";
-    errorSpan.style.backgroundColor = "#f8d7da";
-    errorSpan.style.padding = "2px 5px";
-    errorSpan.style.borderRadius = "3px";
-    document.body.appendChild(errorSpan);
-    setTimeout(() => errorSpan.remove(), 3000);
+    
+    // Restore original text and remove loading animation
+    if (loadingOverlay) {
+      loadingOverlay.remove();
+    }
+    if (style) {
+      style.remove();
+    }
+    
+    // Show error message overlay
+    const errorOverlay = document.createElement("span");
+    errorOverlay.textContent = "Error processing text. Please try again.";
+    errorOverlay.style.backgroundColor = "#ffebee";
+    errorOverlay.style.color = "#c62828";
+    errorOverlay.style.padding = "2px 5px";
+    errorOverlay.style.borderRadius = "3px";
+    errorOverlay.style.display = "inline-block";
+    
+    range.insertNode(errorOverlay);
+    setTimeout(() => errorOverlay.remove(), 3000);
+    
     return { error: error.message };
   }
 }
@@ -350,20 +394,44 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 async function handleTranslatePage(language) {
-  const selection = window.getSelection().toString().trim();
-  if (!selection) return;
+  const selection = window.getSelection();
+  const selectedText = selection.toString().trim();
+  if (!selectedText) return;
 
   const savedRange = saveSelection();
-  const selectedText = selection;
 
   try {
-    // Show loading indicator
-    const loadingSpan = document.createElement("span");
-    loadingSpan.textContent = `⌛ loading ...`;
-    loadingSpan.style.backgroundColor = "#fff3cd";
-    loadingSpan.style.padding = "2px 5px";
-    loadingSpan.style.borderRadius = "3px";
-    document.body.appendChild(loadingSpan);
+    // Create loading overlay for selected text
+    const loadingOverlay = document.createElement("span");
+    loadingOverlay.style.display = "inline";
+    loadingOverlay.style.position = "relative";
+    loadingOverlay.style.animation = "highlight-pulse 1.5s ease-in-out infinite";
+    loadingOverlay.innerHTML = selectedText;
+    loadingOverlay.className = 'processing-text';
+    
+    // Add loading animation styles if not already added
+    if (!document.getElementById('loading-animation-style')) {
+      const style = document.createElement("style");
+      style.id = 'loading-animation-style';
+      style.textContent = `
+        @keyframes highlight-pulse {
+          0% { background-color: rgba(200, 200, 200, 0.8); }
+          50% { background-color: rgba(180, 180, 180, 0.9); }
+          100% { background-color: rgba(200, 200, 200, 0.8); }
+        }
+        .processing-text {
+          background-color: rgba(200, 200, 200, 0.8);
+          border-radius: 2px;
+          padding: 0 1px;
+          margin: 0 -1px;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Replace selection with loading overlay
+    savedRange.deleteContents();
+    savedRange.insertNode(loadingOverlay);
 
     const res = await fetch(
       "https://textsavvy-backend.onrender.com/api/translate",
@@ -383,7 +451,7 @@ async function handleTranslatePage(language) {
     );
 
     // Remove loading indicator
-    loadingSpan.remove();
+    loadingOverlay.remove();
 
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
@@ -394,22 +462,29 @@ async function handleTranslatePage(language) {
       throw new Error("No translation received");
     }
 
-    restoreSelection(savedRange);
-    const newText = `<span style="background: #ffff99;">${data.text}</span>`;
-    const range = window.getSelection().getRangeAt(0);
-    range.deleteContents();
+    const newText = `<span style="background: #e3f2fd;">${data.text}</span>`;
+    savedRange.deleteContents();
     const temp = document.createElement("div");
     temp.innerHTML = newText;
-    range.insertNode(temp.firstChild);
+    savedRange.insertNode(temp.firstChild);
   } catch (error) {
     console.error("Translation error:", error);
-    // Show error message to user
-    const errorSpan = document.createElement("span");
-    errorSpan.textContent = "❌ Translation failed. Please try again.";
-    errorSpan.style.backgroundColor = "#f8d7da";
-    errorSpan.style.padding = "2px 5px";
-    errorSpan.style.borderRadius = "3px";
-    document.body.appendChild(errorSpan);
-    setTimeout(() => errorSpan.remove(), 3000);
+    
+    // Remove loading animation
+    if (loadingOverlay) {
+      loadingOverlay.remove();
+    }
+    
+    // Show error message overlay
+    const errorOverlay = document.createElement("span");
+    errorOverlay.textContent = "Translation failed. Please try again.";
+    errorOverlay.style.backgroundColor = "#ffebee";
+    errorOverlay.style.color = "#c62828";
+    errorOverlay.style.padding = "2px 5px";
+    errorOverlay.style.borderRadius = "3px";
+    errorOverlay.style.display = "inline-block";
+    
+    savedRange.insertNode(errorOverlay);
+    setTimeout(() => errorOverlay.remove(), 3000);
   }
 }
